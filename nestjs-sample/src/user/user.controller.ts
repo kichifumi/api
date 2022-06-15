@@ -23,19 +23,19 @@ export class UserController {
     return await this.service.getUserList();
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getUser(@Param('id') id: number) {
     return await this.service.getUser(Number(id));
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   async addUser(@Body() createUserDTO: UserDTO): Promise<InsertResult> {
     return await this.service.createUser(createUserDTO);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateUser(
     @Param('id') id: number,
@@ -44,7 +44,7 @@ export class UserController {
     return await this.service.updateUser(Number(id), updateUsertDTO);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<DeleteResult> {
     return await this.service.deleteUser(Number(id));
