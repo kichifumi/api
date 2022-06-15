@@ -18,7 +18,6 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-
     return null;
   }
 
@@ -45,14 +44,13 @@ export class AuthService {
 
     const tokens = await this.getTokens(user);
     await this.updateRefreshToken(user, tokens.refresh_token);
-
     return {
       ...tokens,
     };
   }
 
   /**
-   * トークン作成
+   * トークン生成
    */
   private async getTokens(user: User) {
     const payload = { login_id: user.login_id, sub: user.id };
@@ -79,9 +77,8 @@ export class AuthService {
    */
   private async updateRefreshToken(user: User, refreshToken: string) {
     const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
-    const payload = {
+    await this.userRepository.update(user.id, {
       refreshToken: hashedRefreshToken,
-    };
-    await this.userRepository.update(user.id, payload);
+    });
   }
 }
