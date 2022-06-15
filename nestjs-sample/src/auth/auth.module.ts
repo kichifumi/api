@@ -4,9 +4,9 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { RefreshStrategy } from './strategies/refresh.strategy';
 import { AuthController } from './auth.controller';
 import { UserRepository } from 'src/entities/repositories/user.repository';
 
@@ -15,12 +15,9 @@ import { UserRepository } from 'src/entities/repositories/user.repository';
     TypeOrmModule.forFeature([UserRepository]),
     UserModule,
     PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1d' },
-    }),
+    JwtModule.register({}),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, RefreshStrategy],
   exports: [AuthService],
   controllers: [AuthController],
 })
