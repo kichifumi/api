@@ -40,11 +40,8 @@ export class User {
   @Column('tinyint', { width: 1, default: 1 })
   admin_flag: number;
 
-  @Column({ nullable: true, name: 'refreshtoken' })
-  refreshToken: string;
-
-  @Column({ type: 'date', nullable: true, name: 'refreshtokenexp' })
-  refreshTokenExp: string;
+  @Column({ nullable: true })
+  refresh_token: string;
 
   @CreateDateColumn()
   readonly created_at?: Date;

@@ -38,7 +38,7 @@ export class AuthService {
   async refreshToken(user: User, authorization: string) {
     const refreshToken = authorization.replace('Bearer', '').trim();
 
-    if (!bcrypt.compareSync(refreshToken, user.refreshToken)) {
+    if (!bcrypt.compareSync(refreshToken, user.refresh_token)) {
       throw new UnauthorizedException();
     }
 
@@ -78,7 +78,7 @@ export class AuthService {
   private async updateRefreshToken(user: User, refreshToken: string) {
     const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
     await this.userRepository.update(user.id, {
-      refreshToken: hashedRefreshToken,
+      refresh_token: hashedRefreshToken,
     });
   }
 }
