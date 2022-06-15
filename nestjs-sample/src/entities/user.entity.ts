@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -12,13 +13,38 @@ export class User {
   readonly id: number;
 
   @Column('varchar', { length: 255, nullable: false })
-  email: string;
+  login_id: string;
 
-  @Column('varchar', { length: 255, nullable: false })
+  @Column('varchar', {
+    length: 255,
+    nullable: false,
+    transformer: {
+      to: (raw: string) => bcrypt.hashSync(raw, 10),
+      from: (hashed: string) => hashed,
+    },
+  })
   password: string;
 
   @Column('varchar', { length: 255, nullable: false })
-  name: string;
+  first_name: string;
+
+  @Column('varchar', { length: 255, nullable: false })
+  last_name: string;
+
+  @Column('varchar', { length: 255, nullable: false })
+  first_name_kana: string;
+
+  @Column('varchar', { length: 255, nullable: false })
+  last_name_kana: string;
+
+  @Column('tinyint', { width: 1, default: 1 })
+  admin_flag: number;
+
+  @Column({ nullable: true, name: 'refreshtoken' })
+  refreshToken: string;
+
+  @Column({ type: 'date', nullable: true, name: 'refreshtokenexp' })
+  refreshTokenExp: string;
 
   @CreateDateColumn()
   readonly created_at?: Date;

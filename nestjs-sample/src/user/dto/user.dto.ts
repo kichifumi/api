@@ -1,7 +1,11 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class UserDTO {
-  email: string;
+  login_id: string;
   password: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  first_name_kana: string;
+  last_name_kana: string;
+  admin_flag: number;
 }

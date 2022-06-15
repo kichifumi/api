@@ -11,30 +11,31 @@ import {
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getUserUserList() {
     return await this.service.getUserList();
   }
 
-  // @UseGuards(JwtAuthGuard)
+  // @UseGuards(AuthGuard)
   @Get(':id')
   async getUser(@Param('id') id: number) {
     return await this.service.getUser(Number(id));
   }
 
-  // @UseGuards(JwtAuthGuard)
+  // @UseGuards(AuthGuard)
   @Post()
   async addUser(@Body() createUserDTO: UserDTO): Promise<InsertResult> {
     return await this.service.createUser(createUserDTO);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  // @UseGuards(AuthGuard)
   @Put(':id')
   async updateUser(
     @Param('id') id: number,
@@ -43,7 +44,7 @@ export class UserController {
     return await this.service.updateUser(Number(id), updateUsertDTO);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<DeleteResult> {
     return await this.service.deleteUser(Number(id));
