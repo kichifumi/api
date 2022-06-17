@@ -7,8 +7,8 @@ import { AuthService } from '../auth.service';
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
-      // usernameField: 任意のカラムを設定,
-      // passwordField: 任意のカラムを設定,
+      // usernameField: 任意のカラムを設定(デフォルト : username),
+      // passwordField: 任意のカラムを設定(デフォルト : password),
     });
   }
 
