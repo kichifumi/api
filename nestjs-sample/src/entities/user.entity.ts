@@ -13,7 +13,7 @@ export class User {
   readonly id: number;
 
   @Column('varchar', { length: 255, nullable: false })
-  login_id: string;
+  username: string;
 
   @Column('varchar', {
     length: 255,
@@ -24,21 +24,6 @@ export class User {
     },
   })
   password: string;
-
-  @Column('varchar', { length: 255, nullable: false })
-  first_name: string;
-
-  @Column('varchar', { length: 255, nullable: false })
-  last_name: string;
-
-  @Column('varchar', { length: 255, nullable: false })
-  first_name_kana: string;
-
-  @Column('varchar', { length: 255, nullable: false })
-  last_name_kana: string;
-
-  @Column('tinyint', { width: 1, default: 1 })
-  admin_flag: number;
 
   @Column({ nullable: true })
   refresh_token: string;

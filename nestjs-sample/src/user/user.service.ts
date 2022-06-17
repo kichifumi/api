@@ -23,13 +23,8 @@ export class UserService {
 
   async createUser(userDTO): Promise<InsertResult> {
     const user = new User();
-    user.login_id = userDTO.login_id;
+    user.username = userDTO.username;
     user.password = userDTO.password;
-    user.first_name = userDTO.first_name;
-    user.last_name = userDTO.last_name;
-    user.first_name_kana = userDTO.first_name_kana;
-    user.last_name_kana = userDTO.last_name_kana;
-    user.admin_flag = userDTO.admin_flag;
     return await this.userRepository.insert(userDTO);
   }
 

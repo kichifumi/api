@@ -17,7 +17,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
 
   async validate(payload): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { login_id: payload.login_id },
+      where: { username: payload.username },
     });
 
     if (!user) {

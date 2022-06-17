@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import bcrypt = require('bcrypt');
+import * as moment from 'moment';
+import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { UserRepository } from 'src/entities/repositories/user.repository';
 import { jwtConstants } from './constants';
@@ -12,8 +13,8 @@ export class AuthService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async validateUser(login_id: string, password: string) {
-    const user = await this.userRepository.findOne({ where: { login_id } });
+  async validateUser(username: string, password: string) {
+    const user = await this.userRepository.findOne({ where: { username } });
     if (user && bcrypt.compareSync(password, user.password)) {
       const { ...result } = user;
       return result;
@@ -53,7 +54,7 @@ export class AuthService {
    * トークン生成
    */
   private async getTokens(user: User) {
-    const payload = { login_id: user.login_id, sub: user.id };
+    const payload = { username: user.username, sub: user.id };
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -69,6 +70,10 @@ export class AuthService {
     return {
       access_token: accessToken,
       refresh_token: refreshToken,
+      expires_in: await this.getExp(jwtConstants.accessTokenExpiresIn),
+      refresh_token_expires_in: await this.getExp(
+        jwtConstants.refreshTokenExpiresIn,
+      ),
     };
   }
 
@@ -80,5 +85,11 @@ export class AuthService {
     await this.userRepository.update(user.id, {
       refresh_token: hashedRefreshToken,
     });
+  }
+
+  async getExp(day: string) {
+    // TODO: 日付(1dなど)前提にしている
+    const d = day.slice(0, -1);
+    return moment().add(d, 'd').format('YYYY-MM-DD HH:mm:ss');
   }
 }
