@@ -67,13 +67,16 @@ export class AuthService {
       }),
     ]);
 
+    const expires_in: any = this.jwtService.decode(accessToken);
+    const refresh_token_expires_in: any = this.jwtService.decode(refreshToken);
+
     return {
       access_token: accessToken,
       refresh_token: refreshToken,
-      expires_in: await this.getExp(jwtConstants.accessTokenExpiresIn),
-      refresh_token_expires_in: await this.getExp(
-        jwtConstants.refreshTokenExpiresIn,
-      ),
+      expires_in: moment(expires_in.exp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      refresh_token_expires_in: moment(
+        refresh_token_expires_in.exp * 1000,
+      ).format('YYYY-MM-DD HH:mm:ss'),
     };
   }
 
@@ -85,11 +88,5 @@ export class AuthService {
     await this.userRepository.update(user.id, {
       refresh_token: hashedRefreshToken,
     });
-  }
-
-  async getExp(day: string) {
-    // TODO: 日付(1dなど)前提にしている
-    const d = day.slice(0, -1);
-    return moment().add(d, 'd').format('YYYY-MM-DD HH:mm:ss');
   }
 }
